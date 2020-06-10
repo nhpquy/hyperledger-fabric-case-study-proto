@@ -1,27 +1,27 @@
 package parkingservice
 
 import (
-  "reflect"
+	"reflect"
 
 	"encoding/json"
 	// "time"
 
-	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"github.com/hyperledger/fabric-chaincode-go/shim"
 )
 
 type ParkingCommonService struct {
 }
 
-func GetParkingCommonService() (ParkingCommonService) {
-  return ParkingCommonService{}
+func GetParkingCommonService() ParkingCommonService {
+	return ParkingCommonService{}
 }
 
 func (s *ParkingCommonService) GetObject(APIstub shim.ChaincodeStubInterface, objectKeys []string, object interface{}) (interface{}, error) {
-  compositeKey, _ := s.CreateKey(APIstub, object, objectKeys)
+	compositeKey, _ := s.CreateKey(APIstub, object, objectKeys)
 
-  resultAsBytes, err := APIstub.GetState(compositeKey)
+	resultAsBytes, err := APIstub.GetState(compositeKey)
 
-  if err != nil {
+	if err != nil {
 		return nil, err
 	}
 	if resultAsBytes == nil {
@@ -32,7 +32,7 @@ func (s *ParkingCommonService) GetObject(APIstub shim.ChaincodeStubInterface, ob
 }
 
 func (s *ParkingCommonService) SaveObject(APIstub shim.ChaincodeStubInterface, objectKeys []string, object interface{}) (interface{}, error) {
-  compositeKey, _ := s.CreateKey(APIstub, object, objectKeys)
+	compositeKey, _ := s.CreateKey(APIstub, object, objectKeys)
 
 	resultAsBytes, err := json.Marshal(object)
 	if err != nil {
@@ -43,6 +43,6 @@ func (s *ParkingCommonService) SaveObject(APIstub shim.ChaincodeStubInterface, o
 }
 
 func (s *ParkingCommonService) CreateKey(APIstub shim.ChaincodeStubInterface, object interface{}, objectKeys []string) (string, error) {
-  objectType := reflect.ValueOf(object).Type().Name()
-  return APIstub.CreateCompositeKey(objectType, objectKeys)
+	objectType := reflect.ValueOf(object).Type().Name()
+	return APIstub.CreateCompositeKey(objectType, objectKeys)
 }

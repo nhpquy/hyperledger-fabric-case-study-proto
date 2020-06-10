@@ -22,8 +22,8 @@ import (
 
 	. "github.com/parking/model"
 
-	"github.com/hyperledger/fabric/core/chaincode/shim"
-	sc "github.com/hyperledger/fabric/protos/peer"
+	"github.com/hyperledger/fabric-chaincode-go/shim"
+	sc "github.com/hyperledger/fabric-protos-go/peer"
 
 	"github.com/parking/parkingservice"
 )
@@ -71,7 +71,7 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.saveCD(APIstub, args)
 	} else if function == "getAll" {
 		return s.getAll(APIstub)
-		
+
 	} else if function == "saveParkingtimeOpenTime" {
 		return s.saveParkingtimeOpenTime(APIstub, args)
 	} else if function == "saveReservation" {
@@ -99,8 +99,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 
 	} else if function == "findByQuery" {
 		return s.findByQuery(APIstub, args)
-	
-	//parkingspots
+
+		//parkingspots
 	} else if function == "GetParkingspot" {
 		return s.GetParkingspot(APIstub, args)
 	} else if function == "GetOwnerParkingspots" {
@@ -256,57 +256,57 @@ func (s *SmartContract) findBetweenTime(APIstub shim.ChaincodeStubInterface, arg
  */
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
 	s.UserService.Save(APIstub, User{
-		Id: "1",
-		Name: "Prisma",
+		Id:      "1",
+		Name:    "Prisma",
 		Balance: Balance{CurrencyName: "EUR", Amount: decimal.NewFromFloat(100.0)},
 	})
 	s.UserService.Save(APIstub, User{
-		Id: "2",
-		Name: "Rimi",
+		Id:      "2",
+		Name:    "Rimi",
 		Balance: Balance{CurrencyName: "EUR", Amount: decimal.NewFromFloat(200.0)},
 	})
 	s.UserService.Save(APIstub, User{
-		Id: "3",
-		Name: "UT",
+		Id:      "3",
+		Name:    "UT",
 		Balance: Balance{CurrencyName: "EUR", Amount: decimal.NewFromFloat(300.0)},
 	})
 
 	psSelver := Parkingspot{
-		Id: "1",
-		Name: "Tartu-Sobra-tee-1-315",
+		Id:            "1",
+		Name:          "Tartu-Sobra-tee-1-315",
 		CostPerMinute: CurrencyAmount{CurrencyName: "EUR", Amount: decimal.NewFromFloat(10.0)},
 		Owner: User{
-			Id: "1",
+			Id:   "1",
 			Name: "Prisma",
 		},
 		Location: s.GeoHashService.CreateLocation(58.364254, 26.741460),
 	}
 	psRimi := Parkingspot{
-		Id: "2",
-		Name: "Tartu-Sobra-tee-2-1",
+		Id:            "2",
+		Name:          "Tartu-Sobra-tee-2-1",
 		CostPerMinute: CurrencyAmount{CurrencyName: "EUR", Amount: decimal.NewFromFloat(13.0)},
 		Owner: User{
-			Id: "2",
+			Id:   "2",
 			Name: "Rimi",
 		},
 		Location: s.GeoHashService.CreateLocation(58.368405, 26.738235),
 	}
 	psUT1 := Parkingspot{
-		Id: "3",
-		Name: "Liivi 2-1",
+		Id:            "3",
+		Name:          "Liivi 2-1",
 		CostPerMinute: CurrencyAmount{CurrencyName: "EUR", Amount: decimal.NewFromFloat(9.0)},
 		Owner: User{
-			Id: "3",
+			Id:   "3",
 			Name: "UT",
 		},
 		Location: s.GeoHashService.CreateLocation(58.3785427, 26.7143264),
 	}
 	psUT2 := Parkingspot{
-		Id: "4",
-		Name: "Liivi 2-2",
+		Id:            "4",
+		Name:          "Liivi 2-2",
 		CostPerMinute: CurrencyAmount{CurrencyName: "EUR", Amount: decimal.NewFromFloat(9.0)},
 		Owner: User{
-			Id: "3",
+			Id:   "3",
 			Name: "UT",
 		},
 		Location: s.GeoHashService.CreateLocation(58.378538, 26.714325),
@@ -317,30 +317,30 @@ func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Respo
 	s.ParkingspotService.Save(APIstub, psUT1)
 	s.ParkingspotService.Save(APIstub, psUT2)
 
-	s.ParkingTimeService.SaveParkingtimeOpenTime(APIstub,  ParkingTime{
-		Id: "1",
-		ParkingStart: time.Now(),
-		ParkingEnd: time.Now().Add(8 * time.Hour),
+	s.ParkingTimeService.SaveParkingtimeOpenTime(APIstub, ParkingTime{
+		Id:            "1",
+		ParkingStart:  time.Now(),
+		ParkingEnd:    time.Now().Add(8 * time.Hour),
 		CostPerMinute: 10,
-		Parkingspot: psSelver})
+		Parkingspot:   psSelver})
 	s.ParkingTimeService.SaveParkingtimeOpenTime(APIstub, ParkingTime{
-		Id: "2",
-		ParkingStart: time.Now(),
-		ParkingEnd: time.Now().Add(8 * time.Hour),
+		Id:            "2",
+		ParkingStart:  time.Now(),
+		ParkingEnd:    time.Now().Add(8 * time.Hour),
 		CostPerMinute: 12,
-		Parkingspot: psRimi})
+		Parkingspot:   psRimi})
 	s.ParkingTimeService.SaveParkingtimeOpenTime(APIstub, ParkingTime{
-		Id: "3",
-		ParkingStart: time.Now(),
-		ParkingEnd: time.Now().Add(8 * time.Hour),
+		Id:            "3",
+		ParkingStart:  time.Now(),
+		ParkingEnd:    time.Now().Add(8 * time.Hour),
 		CostPerMinute: 3,
-		Parkingspot: psUT1})
+		Parkingspot:   psUT1})
 	s.ParkingTimeService.SaveParkingtimeOpenTime(APIstub, ParkingTime{
-		Id: "4",
-		ParkingStart: time.Now(),
-		ParkingEnd: time.Now().Add(8 * time.Hour),
+		Id:            "4",
+		ParkingStart:  time.Now(),
+		ParkingEnd:    time.Now().Add(8 * time.Hour),
 		CostPerMinute: 3,
-		Parkingspot: psUT2})
+		Parkingspot:   psUT2})
 
 	parkingSpot := []ParkingTime{
 		ParkingTime{ParkingStart: time.Now(), ParkingEnd: time.Now(), CostPerMinute: 10, Parkingspot: psUT1},
@@ -462,7 +462,7 @@ func (s *SmartContract) saveParkingtimeOpenTime(APIstub shim.ChaincodeStubInterf
 	if err != nil {
 		return shim.Error(fmt.Sprintf("Failed to persist parkingTime: %s", err))
 	}
-	
+
 	result, _ := json.Marshal(parkingTimeResult)
 	return shim.Success(result)
 }
@@ -473,15 +473,15 @@ func (s *SmartContract) saveReservation(APIstub shim.ChaincodeStubInterface, arg
 		return shim.Error(fmt.Sprintf("Failed to unmarshal parkingTime reservation. %s: %s", err, args[1]))
 	}
 
-	fmt.Printf("Saving reservation: %s\n",  args[1])
+	fmt.Printf("Saving reservation: %s\n", args[1])
 
 	resultsIterator, err := s.findParkingspotOverlaping(APIstub, parkingTime.ParkingStart, parkingTime.ParkingEnd)
 	if err != nil {
-		return shim.Error(fmt.Sprintf("Error: saveReservation findParkingspotOverlaping: %s\n%s\n", err, args[1]))		
+		return shim.Error(fmt.Sprintf("Error: saveReservation findParkingspotOverlaping: %s\n%s\n", err, args[1]))
 	}
 	if resultsIterator.HasNext() {
 		queryResponse, _ := resultsIterator.Next()
-		fmt.Printf("saveReservation: Found second parkingtime: %s\n",  queryResponse.Value)
+		fmt.Printf("saveReservation: Found second parkingtime: %s\n", queryResponse.Value)
 		existingParkingTime := ParkingTime{}
 		err := json.Unmarshal(queryResponse.Value, &existingParkingTime)
 		if err != nil {
@@ -496,7 +496,7 @@ func (s *SmartContract) saveReservation(APIstub shim.ChaincodeStubInterface, arg
 	if err != nil {
 		return shim.Error(fmt.Sprintf("Failed to persist parkingTime: %s", err))
 	}
-	
+
 	result, _ := json.Marshal(parkingTimeResult)
 	return shim.Success(result)
 }
@@ -512,7 +512,7 @@ func (s *SmartContract) saveParkingtime(APIstub shim.ChaincodeStubInterface, arg
 		queryResponse, _ := resultsIterator.Next()
 		existingParkingTime := ParkingTime{}
 		err := json.Unmarshal(queryResponse.Value, &existingParkingTime)
-		fmt.Printf("Found matcing parkingtime: %s\n",  existingParkingTime);
+		fmt.Printf("Found matcing parkingtime: %s\n", existingParkingTime)
 		if err != nil {
 			return shim.Error(fmt.Sprintf("Error unmarshal: %s -> %s", err, queryResponse.Value))
 		}
@@ -525,7 +525,7 @@ func (s *SmartContract) saveParkingtime(APIstub shim.ChaincodeStubInterface, arg
 	if err != nil {
 		return shim.Error(fmt.Sprintf("Failed to persist parkingTime: %s", err))
 	}
-	
+
 	result, _ := json.Marshal(parkingTimeResult)
 	return shim.Success(result)
 }
@@ -837,7 +837,6 @@ func (s *SmartContract) GetParkingspot(APIstub shim.ChaincodeStubInterface, args
 	return shim.Success(resultAsBytes)
 }
 
-
 func (s *SmartContract) SaveParkingspot(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 	if len(args) != 2 {
 		return shim.Error("Incorrect number of arguments. Expecting 2, id and Parkingspot")
@@ -963,55 +962,55 @@ func (s *SmartContract) put(APIstub shim.ChaincodeStubInterface, id string, park
 }
 
 func (s *SmartContract) findParkingspotOverlaping(APIstub shim.ChaincodeStubInterface, ParkingStart time.Time, ParkingEnd time.Time) (shim.StateQueryIteratorInterface, error) {
-	ParkingStartIso,_ := ParkingStart.MarshalText()
-	ParkingEndIso,_ := ParkingEnd.MarshalText()
+	ParkingStartIso, _ := ParkingStart.MarshalText()
+	ParkingEndIso, _ := ParkingEnd.MarshalText()
 	fmt.Printf("findParkingspotOverlaping: %s, %s\n", ParkingStartIso, ParkingEndIso)
-	return s.findParkingspotOverlapingIsoString(APIstub, string(ParkingStartIso), string(ParkingEndIso));
+	return s.findParkingspotOverlapingIsoString(APIstub, string(ParkingStartIso), string(ParkingEndIso))
 }
 
 func (s *SmartContract) findParkingspotForLocationAndTime(APIstub shim.ChaincodeStubInterface, location ParkingSpotLocation, ParkingStart time.Time, ParkingEnd time.Time) (shim.StateQueryIteratorInterface, error) {
 	LocationGeoHash := location.GeoHash
-	ParkingStartIso,_ := ParkingStart.MarshalText()
-	ParkingEndIso,_ := ParkingEnd.MarshalText()
+	ParkingStartIso, _ := ParkingStart.MarshalText()
+	ParkingEndIso, _ := ParkingEnd.MarshalText()
 	fmt.Printf("findParkingspotForLocationAndTime: %s, %s, %s\n", LocationGeoHash, ParkingStartIso, ParkingEndIso)
-	return s.findParkingspotForLocationAndTimeIsoString(APIstub, LocationGeoHash, string(ParkingStartIso), string(ParkingEndIso));
+	return s.findParkingspotForLocationAndTimeIsoString(APIstub, LocationGeoHash, string(ParkingStartIso), string(ParkingEndIso))
 }
 
 func (s *SmartContract) findParkingspotOverlapingIsoString(APIstub shim.ChaincodeStubInterface, ParkingStart string, ParkingEnd string) (shim.StateQueryIteratorInterface, error) {
 	// fmt.Printf("findParkingspotOverlapingIsoString: %s, %s\n", ParkingFindParkingspotStart, ParkingEnd)
 	queryString := "{" +
 		"\"selector\": {" +
-			"\"$or\": [" +
-				"{" +
-					"\"parkingStart\": {\"$lte\": \"" + ParkingStart + "\"}," +
-					"\"parkingEnd\": {\"$gte\": \"" + ParkingEnd + "\"}," +
-					"\"parkingType\": {\"$eq\": \"FREE\"}" +
-				"}, {" +
-					"\"$and\": [" +
-						"{" +
-							"\"$or\": [" +
-								"{" +
-									"\"parkingStart\": {\"$lt\": \"" + ParkingStart + "\"}" +
-								"}, {" +
-									"\"parkingStart\": {\"$lt\": \"" + ParkingEnd + "\"}" +
-								"}" +
-							"]" +
-						"}, {" +
-							"\"$or\": [" +
-								"{" +
-									"\"parkingEnd\": {\"$gt\": \"" + ParkingStart + "\"}" +
-								"}, " +
-								"{" +
-									"\"parkingEnd\": {\"$gt\": \"" + ParkingEnd + "\"}" +
-								"}" +
-							"]" +
-						"}" +
-					"]," +
-					"\"parkingType\": {\"$ne\": \"FREE\"}" +
-				"}" +
-			"]" +
+		"\"$or\": [" +
+		"{" +
+		"\"parkingStart\": {\"$lte\": \"" + ParkingStart + "\"}," +
+		"\"parkingEnd\": {\"$gte\": \"" + ParkingEnd + "\"}," +
+		"\"parkingType\": {\"$eq\": \"FREE\"}" +
+		"}, {" +
+		"\"$and\": [" +
+		"{" +
+		"\"$or\": [" +
+		"{" +
+		"\"parkingStart\": {\"$lt\": \"" + ParkingStart + "\"}" +
+		"}, {" +
+		"\"parkingStart\": {\"$lt\": \"" + ParkingEnd + "\"}" +
 		"}" +
-	"}"
+		"]" +
+		"}, {" +
+		"\"$or\": [" +
+		"{" +
+		"\"parkingEnd\": {\"$gt\": \"" + ParkingStart + "\"}" +
+		"}, " +
+		"{" +
+		"\"parkingEnd\": {\"$gt\": \"" + ParkingEnd + "\"}" +
+		"}" +
+		"]" +
+		"}" +
+		"]," +
+		"\"parkingType\": {\"$ne\": \"FREE\"}" +
+		"}" +
+		"]" +
+		"}" +
+		"}"
 	fmt.Printf("findParkingspotOverlapingIsoString query: %s\n", queryString)
 	resultsIterator, err := APIstub.GetQueryResult(queryString)
 	if err != nil {
@@ -1025,42 +1024,42 @@ func (s *SmartContract) findParkingspotOverlapingIsoString(APIstub shim.Chaincod
 func (s *SmartContract) findParkingspotForLocationAndTimeIsoString(APIstub shim.ChaincodeStubInterface, LocationGeoHash string, ParkingStart string, ParkingEnd string) (shim.StateQueryIteratorInterface, error) {
 	queryString := "{" +
 		"\"selector\": {" +
-			"\"$or\": [" +
-				"{" +
-					"\"parkingStart\": {\"$lte\": \"" + ParkingStart + "\"}," +
-					"\"parkingEnd\": {\"$gte\": \"" + ParkingEnd + "\"}," +
-					"\"parkingspot.location.geoHash\": {\"$regex\": \"" + LocationGeoHash + ".*\"}," +
-					"\"parkingType\": {\"$eq\": \"FREE\"}" +
-				"}, {" +
-					"\"$and\": [" +
-						"{" +
-							"\"$or\": [" +
-								"{" +
-									"\"parkingStart\": {\"$lt\": \"" + ParkingStart + "\"}" +
-								"}, {" +
-									"\"parkingStart\": {\"$lt\": \"" + ParkingEnd + "\"}" +
-								"}, {" +
-									"\"parkingspot.location.geoHash\": {\"$regex\": \"" + LocationGeoHash + ".*\"}" +
-								"}" +
-							"]" +
-						"}, {" +
-							"\"$or\": [" +
-								"{" +
-									"\"parkingEnd\": {\"$gt\": \"" + ParkingStart + "\"}" +
-								"}, " +
-								"{" +
-									"\"parkingEnd\": {\"$gt\": \"" + ParkingEnd + "\"}" +
-								"}, {" +
-									"\"parkingspot.location.geoHash\": {\"$regex\": \"" + LocationGeoHash + ".*\"}" +
-								"}" +
-							"]" +
-						"}" +
-					"]," +
-					"\"parkingType\": {\"$ne\": \"FREE\"}" +
-				"}" +
-			"]" +
+		"\"$or\": [" +
+		"{" +
+		"\"parkingStart\": {\"$lte\": \"" + ParkingStart + "\"}," +
+		"\"parkingEnd\": {\"$gte\": \"" + ParkingEnd + "\"}," +
+		"\"parkingspot.location.geoHash\": {\"$regex\": \"" + LocationGeoHash + ".*\"}," +
+		"\"parkingType\": {\"$eq\": \"FREE\"}" +
+		"}, {" +
+		"\"$and\": [" +
+		"{" +
+		"\"$or\": [" +
+		"{" +
+		"\"parkingStart\": {\"$lt\": \"" + ParkingStart + "\"}" +
+		"}, {" +
+		"\"parkingStart\": {\"$lt\": \"" + ParkingEnd + "\"}" +
+		"}, {" +
+		"\"parkingspot.location.geoHash\": {\"$regex\": \"" + LocationGeoHash + ".*\"}" +
 		"}" +
-	"}"
+		"]" +
+		"}, {" +
+		"\"$or\": [" +
+		"{" +
+		"\"parkingEnd\": {\"$gt\": \"" + ParkingStart + "\"}" +
+		"}, " +
+		"{" +
+		"\"parkingEnd\": {\"$gt\": \"" + ParkingEnd + "\"}" +
+		"}, {" +
+		"\"parkingspot.location.geoHash\": {\"$regex\": \"" + LocationGeoHash + ".*\"}" +
+		"}" +
+		"]" +
+		"}" +
+		"]," +
+		"\"parkingType\": {\"$ne\": \"FREE\"}" +
+		"}" +
+		"]" +
+		"}" +
+		"}"
 	fmt.Printf("findParkingspotOverlapingIsoString query: %s\n", queryString)
 	resultsIterator, err := APIstub.GetQueryResult(queryString)
 	if err != nil {
@@ -1097,7 +1096,7 @@ func (s *SmartContract) marshalQueryResult(resultsIterator shim.StateQueryIterat
 		// buffer.WriteString("\"")
 		// buffer.WriteString(queryResponse.Key)
 		// buffer.WriteString("\"")
-    // 
+		//
 		// buffer.WriteString(", \"Record\":")
 		//// Record is a JSON object, so we write as-is
 		buffer.WriteString(string(queryResponse.Value))
@@ -1121,7 +1120,7 @@ func main() {
 		ParkingTimeService:   parkingservice.GetParkingTimeService(),
 		UserService:          parkingservice.GetUserService(),
 		ParkingCommonService: parkingservice.GetParkingCommonService(),
-		GeoHashService: parkingservice.GetGeoHashService(),
+		GeoHashService:       parkingservice.GetGeoHashService(),
 	})
 	if err != nil {
 		fmt.Printf("Error creating new Smart Contract: %s", err)
